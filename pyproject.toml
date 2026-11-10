@@ -1,0 +1,18 @@
+[project]
+name = "backlog-agent"
+version = "0.1.0"
+description = "Run a coding agent for Backlog.md tasks"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.28,<0.29",
+]
+
+[project.scripts]
+backlog-agent = "backlog_agent:app"
+
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["backlog_agent"]
