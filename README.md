@@ -2,7 +2,36 @@
 
 A foreground watcher for an existing [Backlog.md](https://backlog.md/) project. It uses `backlog task list --json --watch` and starts an agent for each task entering the filtered list. By default it watches tasks with status `To Do`; this status must be configured in the project.
 
-Install the Backlog.md CLI and your agent's CLI. Once published on PyPI, install this tool with `uv tool install codex-backlog`. To install from a local checkout, use `uv tool install /path/to/codex-backlog`. Run it in a project:
+## Installation
+
+Install [Backlog.md](https://backlog.md/) and the CLI for your agent (Codex by default), and make both commands available on your PATH. You'll also need Python 3.11 or later and [uv](https://docs.astral.sh/uv/).
+
+Install from PyPI:
+
+```sh
+uv tool install codex-backlog
+```
+
+Or install from a local checkout:
+
+```sh
+uv tool install /path/to/codex-backlog
+```
+
+## Quick start
+
+In an existing Backlog.md project containing `backlog/config.yml`, start the watcher:
+
+```sh
+cd /path/to/project
+codex-backlog
+```
+
+The watcher runs in the foreground and starts Codex for matching `To Do` tasks. Press Ctrl+C to stop it. See [Backlog.md](https://backlog.md/) for creating and managing a project.
+
+## Options and filters
+
+For example:
 
 ```sh
 codex-backlog
