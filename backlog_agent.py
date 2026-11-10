@@ -9,7 +9,7 @@ import shlex
 import signal
 import subprocess
 import sys
-from typing import Iterator, TextIO
+from typing import Iterable, Iterator
 
 import typer
 
@@ -28,7 +28,7 @@ def prompt(project: Path, task_id: str) -> str:
     )
 
 
-def snapshots(stream: TextIO) -> Iterator[dict]:
+def snapshots(stream: Iterable[str]) -> Iterator[dict]:
     """Decode successive, potentially multiline JSON values from the watch stream."""
     decoder = json.JSONDecoder()
     buffer = ""
@@ -49,7 +49,7 @@ def snapshots(stream: TextIO) -> Iterator[dict]:
         raise ValueError("Incomplete or invalid Backlog watch snapshot")
 
 
-def dispatch(stream: TextIO, project: Path, command: list[str]) -> None:
+def dispatch(stream: Iterable[str], project: Path, command: list[str]) -> None:
     seen: set[str] = set()
     for snapshot in snapshots(stream):
         tasks = snapshot["tasks"]

@@ -2,7 +2,7 @@
 
 A foreground watcher for an existing [Backlog.md](https://backlog.md/) project. It uses `backlog task list --json --watch` and starts an agent for each task entering the filtered list. By default it watches tasks with status `To Do`; this status must be configured in the project.
 
-Install the Backlog.md CLI and your agent's CLI, then install this tool with `uv tool install /path/to/backlog-agent`. Run it in a project:
+Install the Backlog.md CLI and your agent's CLI. Once published on PyPI, install this tool with `uv tool install backlog-agent`. To install from a local checkout, use `uv tool install /path/to/backlog-agent`. Run it in a project:
 
 ```sh
 backlog-agent
