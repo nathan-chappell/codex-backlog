@@ -1,15 +1,15 @@
-# backlog-agent
+# codex-backlog
 
 A foreground watcher for an existing [Backlog.md](https://backlog.md/) project. It uses `backlog task list --json --watch` and starts an agent for each task entering the filtered list. By default it watches tasks with status `To Do`; this status must be configured in the project.
 
-Install the Backlog.md CLI and your agent's CLI. Once published on PyPI, install this tool with `uv tool install backlog-agent`. To install from a local checkout, use `uv tool install /path/to/backlog-agent`. Run it in a project:
+Install the Backlog.md CLI and your agent's CLI. Once published on PyPI, install this tool with `uv tool install codex-backlog`. To install from a local checkout, use `uv tool install /path/to/codex-backlog`. Run it in a project:
 
 ```sh
-backlog-agent
-backlog-agent --yolo
-backlog-agent --project /path/to/project --command 'codex exec -'
-backlog-agent -- --status 'In Progress' --assignee @agent
-backlog-agent -- --search @agent
+codex-backlog
+codex-backlog --yolo
+codex-backlog --project /path/to/project --command 'codex exec -'
+codex-backlog -- --status 'In Progress' --assignee @agent
+codex-backlog -- --search @agent
 ```
 
 `--yolo` runs the default Codex command with `--dangerously-bypass-approvals-and-sandbox`, skipping approval prompts and sandboxing for agent commands. Use it only in an appropriately isolated environment. For a custom `--command`, configure its permissions directly; `--yolo` cannot be combined with a different command.

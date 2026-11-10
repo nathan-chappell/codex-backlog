@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from typer.testing import CliRunner
 
-from backlog_agent import app, dispatch, snapshots
+from codex_backlog import app, dispatch, snapshots
 
 
 def snapshot(*ids):
@@ -29,7 +29,7 @@ class WatchTests(unittest.TestCase):
             ]:
                 with self.subTest(options=options):
                     process = SimpleNamespace(stdout=io.StringIO(snapshot()), wait=lambda: 0, poll=lambda: 0)
-                    with patch("backlog_agent.subprocess.run", return_value=SimpleNamespace(stdout="To Do, Done")), patch("backlog_agent.subprocess.Popen", return_value=process), patch("backlog_agent.dispatch") as dispatch_mock:
+                    with patch("codex_backlog.subprocess.run", return_value=SimpleNamespace(stdout="To Do, Done")), patch("codex_backlog.subprocess.Popen", return_value=process), patch("codex_backlog.dispatch") as dispatch_mock:
                         runner.invoke(app, ["--project", str(project), *options])
                     self.assertEqual(dispatch_mock.call_args.args[2], expected)
             result = runner.invoke(app, ["--project", str(project), "--yolo", "--command", "other-agent"])
@@ -38,7 +38,7 @@ class WatchTests(unittest.TestCase):
 
     def test_snapshots_dispatch_only_when_tasks_enter(self):
         stream = io.StringIO(snapshot("TASK-1") + snapshot("TASK-1", "TASK-2") + snapshot("TASK-2") + snapshot("TASK-1", "TASK-2"))
-        with patch("backlog_agent.subprocess.run", return_value=SimpleNamespace(returncode=0)) as run:
+        with patch("codex_backlog.subprocess.run", return_value=SimpleNamespace(returncode=0)) as run:
             dispatch(stream, Path("/project"), ["agent"])
         self.assertEqual(run.call_count, 3)
         self.assertIn("TASK-1", run.call_args_list[0].kwargs["input"])
@@ -56,18 +56,18 @@ class WatchTests(unittest.TestCase):
             (project / "backlog").mkdir()
             (project / "backlog" / "config.yml").touch()
             runner = CliRunner()
-            with patch("backlog_agent.subprocess.run", return_value=SimpleNamespace(stdout="Open, Done\n")), patch("backlog_agent.subprocess.Popen") as popen:
+            with patch("codex_backlog.subprocess.run", return_value=SimpleNamespace(stdout="Open, Done\n")), patch("codex_backlog.subprocess.Popen") as popen:
                 result = runner.invoke(app, ["--project", str(project)])
                 self.assertEqual(result.exit_code, 1)
                 self.assertIn('Default status "To Do" is not configured', result.output)
                 popen.assert_not_called()
             process = SimpleNamespace(stdout=io.StringIO(snapshot()), wait=lambda: 1, poll=lambda: 1)
-            with patch("backlog_agent.subprocess.run", return_value=SimpleNamespace(stdout="To Do, Done\n")), patch("backlog_agent.subprocess.Popen", return_value=process) as popen:
+            with patch("codex_backlog.subprocess.run", return_value=SimpleNamespace(stdout="To Do, Done\n")), patch("codex_backlog.subprocess.Popen", return_value=process) as popen:
                 result = runner.invoke(app, ["--project", str(project), "--", "--search", "@agent"])
                 self.assertEqual(result.exit_code, 1)
                 self.assertEqual(popen.call_args.args[0], ["backlog", "task", "list", "--status", "To Do", "--search", "@agent", "--json", "--watch"])
             process.stdout = io.StringIO(snapshot())
-            with patch("backlog_agent.subprocess.run") as config, patch("backlog_agent.subprocess.Popen", return_value=process) as popen:
+            with patch("codex_backlog.subprocess.run") as config, patch("codex_backlog.subprocess.Popen", return_value=process) as popen:
                 runner.invoke(app, ["--project", str(project), "--", "--status", "Open"])
                 config.assert_not_called()
                 self.assertIn("Open", popen.call_args.args[0])

@@ -1,5 +1,5 @@
 [project]
-name = "backlog-agent"
+name = "codex-backlog"
 version = "0.1.0"
 description = "Run a coding agent for Backlog.md tasks"
 readme = "README.md"
@@ -9,11 +9,11 @@ dependencies = [
 ]
 
 [project.scripts]
-backlog-agent = "backlog_agent:app"
+codex-backlog = "codex_backlog:app"
 
 [build-system]
 requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["backlog_agent"]
+py-modules = ["codex_backlog"]
